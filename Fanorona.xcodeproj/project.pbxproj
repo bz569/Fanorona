@@ -13,6 +13,10 @@
 		B219F3191A151D3C0078164F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B219F3181A151D3C0078164F /* Images.xcassets */; };
 		B219F31C1A151D3C0078164F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B219F31A1A151D3C0078164F /* LaunchScreen.xib */; };
 		B219F3281A151D3C0078164F /* FanoronaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219F3271A151D3C0078164F /* FanoronaTests.swift */; };
+		B219F3321A1523230078164F /* Board33ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219F3311A1523230078164F /* Board33ViewController.swift */; };
+		B219F3351A1523720078164F /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219F3341A1523720078164F /* Board.swift */; };
+		B219F3371A1523D10078164F /* Board33.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219F3361A1523D10078164F /* Board33.swift */; };
+		B219F33A1A1685D20078164F /* AlphaBeta33.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219F3391A1685D20078164F /* AlphaBeta33.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,11 @@
 		B219F3211A151D3C0078164F /* FanoronaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FanoronaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B219F3261A151D3C0078164F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B219F3271A151D3C0078164F /* FanoronaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FanoronaTests.swift; sourceTree = "<group>"; };
+		B219F3311A1523230078164F /* Board33ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board33ViewController.swift; sourceTree = "<group>"; };
+		B219F3341A1523720078164F /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		B219F3361A1523D10078164F /* Board33.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board33.swift; sourceTree = "<group>"; };
+		B219F3391A1685D20078164F /* AlphaBeta33.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlphaBeta33.swift; sourceTree = "<group>"; };
+		B219F3401A16B5DD0078164F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,9 +86,11 @@
 		B219F30E1A151D3C0078164F /* Fanorona */ = {
 			isa = PBXGroup;
 			children = (
-				B219F3111A151D3C0078164F /* AppDelegate.swift */,
-				B219F3131A151D3C0078164F /* ViewController.swift */,
 				B219F3151A151D3C0078164F /* Main.storyboard */,
+				B219F3131A151D3C0078164F /* ViewController.swift */,
+				B219F3311A1523230078164F /* Board33ViewController.swift */,
+				B219F3331A15233B0078164F /* Model */,
+				B219F33B1A1685DB0078164F /* AI */,
 				B219F3181A151D3C0078164F /* Images.xcassets */,
 				B219F31A1A151D3C0078164F /* LaunchScreen.xib */,
 				B219F30F1A151D3C0078164F /* Supporting Files */,
@@ -90,7 +101,9 @@
 		B219F30F1A151D3C0078164F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B219F3111A151D3C0078164F /* AppDelegate.swift */,
 				B219F3101A151D3C0078164F /* Info.plist */,
+				B219F3401A16B5DD0078164F /* MyPlayground.playground */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -110,6 +123,23 @@
 				B219F3261A151D3C0078164F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B219F3331A15233B0078164F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B219F3341A1523720078164F /* Board.swift */,
+				B219F3361A1523D10078164F /* Board33.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		B219F33B1A1685DB0078164F /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				B219F3391A1685D20078164F /* AlphaBeta33.swift */,
+			);
+			name = AI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,7 +242,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B219F3371A1523D10078164F /* Board33.swift in Sources */,
+				B219F3321A1523230078164F /* Board33ViewController.swift in Sources */,
 				B219F3141A151D3C0078164F /* ViewController.swift in Sources */,
+				B219F3351A1523720078164F /* Board.swift in Sources */,
+				B219F33A1A1685D20078164F /* AlphaBeta33.swift in Sources */,
 				B219F3121A151D3C0078164F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
