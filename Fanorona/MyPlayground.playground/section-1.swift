@@ -4,14 +4,19 @@ import UIKit
 
 var str:NSString = "Hello, playground"
 
-var test = str.substringFromIndex(1)
+class SharedDictionary<K:Hashable, V> {
+    var dict : Dictionary<K, V>?
+    
+    // add the methods you need, including overloading operators
+    func put(key:K, value:V){
+        dict![key] = value
+    }
+    
+}
 
 
-var actionNSString:NSString = "123455"
-let fromString:String = actionNSString.substringToIndex(1)
-let from:Int = fromString.toInt()!
-actionNSString = actionNSString.substringFromIndex(1)
-let toString:String = actionNSString.substringToIndex(1)
-let to:Int = toString.toInt()!
+let date = NSDate()
+
+let i:NSTimeInterval = date.timeIntervalSinceNow
 
 

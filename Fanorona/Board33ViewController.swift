@@ -24,6 +24,8 @@ class Board33ViewController: UIViewController {
     var gameState:GameState = GameState.BeforeFirstStep
     var stepsCache:[Int] = []
     
+    var playerSide:Int = -1
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +45,11 @@ class Board33ViewController: UIViewController {
         
         self.startGame()
         self.refreshBoardUI()
+        
+        //!!! test for alphabeta, need to be remove
+//        let alphaBeta:AlphaBeta33 = AlphaBeta33(side: 1, initBoard: self.board)
+//        alphaBeta.alphaBetaSearch(self.board)
+        
     }
     
     func startGame() {
@@ -94,7 +101,7 @@ class Board33ViewController: UIViewController {
                             println("white win")
                         }
                         
-                        if captureType == Board33.CaptureCondidion.None{         //move without capturing, forward to End state
+                        if captureType == Board33.CaptureCondition.None{         //move without capturing, forward to End state
                             self.gameState = GameState.EndTurn
                             self.btn_finish.enabled = true
                             self.btn_finish.backgroundColor = UIColor(red: 52.0/255.0, green: 152.0/255.0, blue: 219.0/255.0, alpha: 1.0)
@@ -147,8 +154,21 @@ class Board33ViewController: UIViewController {
     @IBAction func onClickFinishButton(sender: UIButton) {
         if self.gameState != GameState.BeforeFirstStep {
             self.changeSide()
+            self.aiPlayer()
         }
     }
+    
+    func aiPlayer(){
+        //make sure it is ai's turn
+        if self.turn != self.playerSide {
+            let ai:AlphaBeta33 = AlphaBeta33(side: self.turn, initBoard: self.board)
+            let bestMove:String = ai.alphaBetaSearch(ai.initBoard)
+            self.board.processMove(bestMove, side: self.turn)
+            self.refreshBoardUI()
+            self.changeSide()
+        }
+    }
+    
     
     func changeSide() {
         self.gameState = GameState.BeforeFirstStep

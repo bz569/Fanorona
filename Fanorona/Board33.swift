@@ -10,10 +10,28 @@ import UIKit
 
 class Board33: Board {
     
-    let moveDir = [-3, 3, -1, 1, -4, -2, 2, 4]  //Up, down, left, right, upleft, upright, downleft, downright
     
-    enum CaptureCondidion {
+    enum CaptureCondition {
         case None, Apprach, Withdrawal, Both
+    }
+    
+    enum MoveCondition {
+        case    Success,
+                ERROR_NoAction,
+                ERROR_MoveAfterNoCapture,
+                ERROR_FromIndexIllegal,
+                ERROR_NotSameSide,
+                ERROR_CannotReach,
+                ERROR_DestPosNotBlank,
+                ERROR_SameDirection,
+                ERROR_PosVisited,
+                ERROR_MoveWithoutCapWhenCapAvailable,
+                ERROR_MoveWithoutCapInContinueMove,
+                ERROR_ApproachPositionNotAvailable,
+                ERROR_ApprachPositionIsSameSideOrEmpty,
+                ERROR_WithdrawalPositionNotAvailable,
+                ERROR_WithdrawalPositionIsSameSideOrEmpty,
+                ERROR_moveTypeWrong
     }
     
     override init() {
@@ -33,10 +51,29 @@ class Board33: Board {
             8: [4, 5, 7]
         ]
     }
+    
+    init(board:Board33) {
+        super.init()
+        
+        self.status = board.status
+        self.size = 3
+        
+        self.moveRules = [
+            0: [1, 3, 4],
+            1: [0, 2, 4],
+            2: [1, 4, 5],
+            3: [0, 4, 6],
+            4: [0, 1, 2, 3, 5, 6, 7, 8],
+            5: [2, 4, 8],
+            6: [3, 4, 7],
+            7: [4, 6, 8],
+            8: [4, 5, 7]
+        ]
+    }
    
     func resetBoard() {
-//        //For test
-//        self.status = [-1, 0, 0, 0 ,0, 0, 0, 1, 1]
+        //For test
+//        self.status = [1, 0, 1, 1 ,-1, -1, -1, 0, -1]
         
         self.status = [1, 1, 1, 1, 0, -1, -1, -1, -1]       //1 for black, and -1 for white
     }
@@ -71,7 +108,7 @@ class Board33: Board {
         
         //if has at least one capture, must move to capture
         if self.hasAnyCaptureFor(Side: status[from]){
-            if self.getCaptureCondition(From: from, To: to) == CaptureCondidion.None {
+            if self.getCaptureCondition(From: from, To: to) == CaptureCondition.None {
                 println("must move to capture")
                 return false
             }
@@ -79,6 +116,8 @@ class Board33: Board {
         
         return true
     }
+    
+    
     
     
     /**
@@ -89,7 +128,7 @@ class Board33: Board {
     
     :returns: the type of capture: Both, None, Approach, Withdrawal
     */
-    func getCaptureCondition(From from:Int, To to:Int) -> CaptureCondidion {
+    func getCaptureCondition(From from:Int, To to:Int) -> CaptureCondition {
         let dir:Int = to - from
         var hasApproach:Bool = false
         var hasWithdrawal:Bool = false
@@ -114,13 +153,13 @@ class Board33: Board {
         }
         
         if hasApproach && hasWithdrawal {
-            return CaptureCondidion.Both
+            return CaptureCondition.Both
         }else if hasApproach {
-            return CaptureCondidion.Apprach
+            return CaptureCondition.Apprach
         }else if hasWithdrawal {
-            return CaptureCondidion.Withdrawal
+            return CaptureCondition.Withdrawal
         }else {
-            return CaptureCondidion.None
+            return CaptureCondition.None
         }
     }
     
@@ -138,7 +177,7 @@ class Board33: Board {
                 let toList = self.moveRules[from]!
                 for to:Int in toList {
                     if (self.status[to] == 0) {
-                        if self.getCaptureCondition(From: from, To: to) != CaptureCondidion.None {
+                        if self.getCaptureCondition(From: from, To: to) != CaptureCondition.None {
                             println("has capture form \(from) to \(to):")
                             return true
                         }
@@ -176,12 +215,12 @@ class Board33: Board {
     :param: to   the pos after move
     :param: type the type of capture
     */
-    func captureAfterMove(From from:Int, To to:Int, ByType type:CaptureCondidion){
+    func captureAfterMove(From from:Int, To to:Int, ByType type:CaptureCondition){
         let dir = to - from
-        if type == CaptureCondidion.Apprach {
+        if type == CaptureCondition.Apprach {
             let approachPos = to + dir
             self.status[approachPos] = 0
-        }else if type == CaptureCondidion.Withdrawal {
+        }else if type == CaptureCondition.Withdrawal {
             let withdrawalPos = from - dir
             self.status[withdrawalPos] = 0
         }
@@ -218,7 +257,7 @@ class Board33: Board {
         let nextPosList = self.moveRules[from]
         
         for nextPos:Int in nextPosList! {
-            if self.getCaptureCondition(From: from, To: nextPos) != CaptureCondidion.None {
+            if self.getCaptureCondition(From: from, To: nextPos) != CaptureCondition.None {
                 if nextPos - from != lastDir {
                     return true
                 }
@@ -252,7 +291,7 @@ class Board33: Board {
             return false
         }
         
-        if getCaptureCondition(From: from, To: to) == CaptureCondidion.None {
+        if getCaptureCondition(From: from, To: to) == CaptureCondition.None {
             return false
         }
         
@@ -260,7 +299,7 @@ class Board33: Board {
     }
     
     /**
-    Move a piece
+    Move a piece after capturing
     
     :param: from move from this pos
     :param: to   to this pos
@@ -276,6 +315,167 @@ class Board33: Board {
         }else {
             return false
         }
+    }
+    
+    
+    
+    func processMove(var moveString:NSString, side:Int) -> MoveCondition{
+        
+        if countElements(moveString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) == 0 {
+            return MoveCondition.ERROR_NoAction
+        }
+        
+        var moveIndex:Int = 0
+        var noCapMove:Bool = false
+        var endPosition:Int = -1
+        
+        let movesArray:[String] = moveString.componentsSeparatedByString("||") as [String]
+        var visitedPos:[Int]  = []
+        
+        for i in 0..<movesArray.count {
+            
+            //if we made a non-capturing move and are trying to make another move, throw and error as it is not allowed
+            if(noCapMove){
+                return MoveCondition.ERROR_MoveAfterNoCapture
+            }
+            
+            let curMove:String = movesArray[i]
+            let moveArray  = Array(curMove)
+            let type:String = String(moveArray[0])
+            let from:Int = String(moveArray[1]).toInt()!
+            let to:Int = String(moveArray[2]).toInt()!
+            
+            //check rules of fanorona
+            
+            //Check the from index is legal
+            if (from > 8 && from < 0) {
+                return MoveCondition.ERROR_FromIndexIllegal
+            }
+            
+            //make sure the moving piece is the same color as cur side
+            if (self.status[from] != side) {
+                return MoveCondition.ERROR_NotSameSide
+            }
+            
+            //make sure destination postion is reachable
+            let neighborList:[Int] = self.moveRules[from]!
+            if !contains(neighborList, to) {
+                return MoveCondition.ERROR_CannotReach
+            }
+            
+            //see if there is a piece in the dst position
+            if self.status[to] != 0 {
+                return MoveCondition.ERROR_DestPosNotBlank
+            }
+            
+            //check to make sure there are not 2 move in the same direction on the same line...
+            if moveIndex > 0 {
+                let lastMove:String = movesArray[i - 1]
+                let lastMoveArray = Array(lastMove)
+                let lastFrom:Int = String(lastMoveArray[1]).toInt()!
+                let lastTo:Int = String(lastMoveArray[2]).toInt()!
+                
+                let lastDir = lastTo - lastFrom
+                let dir = to - from
+                
+                if lastDir == dir {
+                    return MoveCondition.ERROR_SameDirection
+                }
+            }
+            
+            //check if the position has been visited before
+            if contains(visitedPos, to) {
+                return MoveCondition.ERROR_PosVisited
+            }
+            
+            //Check the rules done
+            //Process the move will be done
+            
+            
+            //check for move without capturing
+            if type == "M" {
+                noCapMove = true
+                
+                if (moveIndex == 0){
+                    if hasAnyCaptureFor(Side: side) {
+                        return MoveCondition.ERROR_MoveWithoutCapWhenCapAvailable
+                    }
+                }else {
+                    return MoveCondition.ERROR_MoveWithoutCapInContinueMove
+                }
+            }
+            //check for approach capture
+            else if type == "A"{
+                let dir:Int = to - from
+                var approachPos:Int = to + dir
+                
+                //check if the approach position is available
+                if !contains(self.moveRules[to] as [Int]!, approachPos) {
+                    return MoveCondition.ERROR_ApproachPositionNotAvailable
+                }
+                
+                //check to make sure the next peice is opposite of the current mover
+                if self.status[approachPos] == side || self.status[approachPos] == 0{
+                    return MoveCondition.ERROR_ApprachPositionIsSameSideOrEmpty
+                }
+                
+                //loop through the rest of the pieces being captured, and capture them
+                while (true) {
+                    self.status[approachPos] = 0
+                    
+                    approachPos += dir
+                    
+                    if !contains(self.moveRules[to] as [Int]!, approachPos) {
+                        break;
+                    }
+                    
+                    if self.status[approachPos] == side {
+                        break;
+                    }
+                }
+            }
+            //check for withdrawal capture
+            else if type == "W" {
+                let dir:Int = to - from
+                var withdrawalPos:Int = from - dir
+                
+                //check if the withdrawal position is available
+                if !contains(self.moveRules[from] as [Int]!, withdrawalPos) {
+                    return MoveCondition.ERROR_WithdrawalPositionNotAvailable
+                }
+                
+                //check to make sure the next peice is opposite of the current mover
+                if self.status[withdrawalPos] == side || self.status[withdrawalPos] == 0{
+                    return MoveCondition.ERROR_WithdrawalPositionIsSameSideOrEmpty
+                }
+                
+                //loop through the rest of the pieces being captured, and capture them
+                while (true) {
+                    self.status[withdrawalPos] = 0
+                    
+                    withdrawalPos -= dir
+                    
+                    if !contains(self.moveRules[to] as [Int]!, withdrawalPos) {
+                        break;
+                    }
+                    
+                    if self.status[withdrawalPos] == side {
+                        break;
+                    }
+                }
+            }
+            else {
+                return MoveCondition.ERROR_moveTypeWrong
+            }
+            
+            //Move the piece
+            self.status[to] = self.status[from]
+            self.status[from] = 0
+            visitedPos.append(from)
+            moveIndex++
+            
+        }
+        return MoveCondition.Success
     }
     
 }
