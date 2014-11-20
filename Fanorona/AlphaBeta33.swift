@@ -110,7 +110,12 @@ class AlphaBeta33: NSObject {
             }
             
             let resultOfMinValue = minValue(Board: Board33(board:tmpState), currentDepth: currentDepth + 1, alpha: alpha, beta: beta)
-            value = max(value, resultOfMinValue)
+            
+            if resultOfMinValue > value{
+                value = resultOfMinValue
+                bestMove = curMove
+            }
+//            value = max(value, resultOfMinValue)
             
             if value >= beta {
                 hash.put(bestMove, value: value)
@@ -140,7 +145,7 @@ class AlphaBeta33: NSObject {
         }
         
         //generate a list of possible moves
-        let possibleMoves:SharedDictionary<String, Board33> = getPossibleBoardStates(Board33(board: theirState), curSide: self.side)
+        let possibleMoves:SharedDictionary<String, Board33> = getPossibleBoardStates(Board33(board: theirState), curSide: 0 - self.side)
         let moves = Array(possibleMoves.dict.keys)
         
         for curMove in moves {
@@ -148,8 +153,8 @@ class AlphaBeta33: NSObject {
             var tmpState:Board33 = Board33(board: theirState)
             
             //process the current move
-            if tmpState.processMove(curMoveStr, side: self.side) != Board33.MoveCondition.Success {
-                print(tmpState.processMove(curMoveStr, side: self.side))
+            if tmpState.processMove(curMoveStr, side: 0 - self.side) != Board33.MoveCondition.Success {
+                print(tmpState.processMove(curMoveStr, side: 0 - self.side))
             }
             
             let result:SharedDictionary<String, Float> = maxValue(Board: tmpState, currentDepth: currentDepth + 1, alpha: alpha, beta: beta, move: curMoveStr)
@@ -173,13 +178,15 @@ class AlphaBeta33: NSObject {
     func isTimeOut() -> Bool {
         
         if self.startTime?.timeIntervalSinceNow < -10.0 {
-            return true
+//            println("timeout")
+            return false
         }else {
             return false
         }
     }
     
     func getHeuristic(Board board:Board33, side:Int) -> Float {
+        //TODO: 调整启发函数，使其再不能取胜的情况下，尽量选择平局
         if side == 1 {              //for black side
             if board.win() == 1 {
                 return 1.0
