@@ -178,7 +178,7 @@ class Board33: Board {
                 for to:Int in toList {
                     if (self.status[to] == 0) {
                         if self.getCaptureCondition(From: from, To: to) != CaptureCondition.None {
-                            println("has capture form \(from) to \(to):")
+//                            println("has capture form \(from) to \(to):")
                             return true
                         }
                     }
@@ -423,9 +423,10 @@ class Board33: Board {
                 while (true) {
                     self.status[approachPos] = 0
                     
+                    let tmpPos = approachPos
                     approachPos += dir
                     
-                    if !contains(self.moveRules[to] as [Int]!, approachPos) {
+                    if !contains(self.moveRules[tmpPos] as [Int]!, approachPos) {
                         break;
                     }
                     

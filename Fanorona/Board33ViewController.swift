@@ -84,36 +84,38 @@ class Board33ViewController: UIViewController {
                     let from = selectedPiece!.tag
                     let to = sender.tag
                     
-                    let captureType = self.board.getCaptureCondition(From: from, To: to)
-                    
-                    //move the piece
-                    if self.board.movePiece(From: from, To: to) {
-                        //add the original pos to steps cache
-                        self.stepsCache.append(from)
+                    if(self.board.status[to] == 0){
+                        let captureType = self.board.getCaptureCondition(From: from, To: to)
                         
-                        //capture after move
-                        self.board.captureAfterMove(From: from, To: to, ByType: captureType)
-                        self.refreshBoardUI()
-                        
-                        if self.board.win() == 1{
-                            println("black win")
-                        }else if self.board.win() == -1 {
-                            println("white win")
-                        }
-                        
-                        if captureType == Board33.CaptureCondition.None{         //move without capturing, forward to End state
-                            self.gameState = GameState.EndTurn
-                            self.btn_finish.enabled = true
-                            self.btn_finish.backgroundColor = UIColor(red: 52.0/255.0, green: 152.0/255.0, blue: 219.0/255.0, alpha: 1.0)
-                            self.unselectPiece()
-                        }else {                                                 //after capturing, player can choose continue or end the turn
-                            self.gameState = GameState.AfterCapturing
-                            self.btn_finish.enabled = true
-                            self.btn_finish.backgroundColor = UIColor(red: 52.0/255.0, green: 152.0/255.0, blue: 219.0/255.0, alpha: 1.0)
-                            self.unselectPiece()
-                            self.selectPiece(self.btns_pieces[to])
-                        }
-                        
+                        //move the piece
+                        if self.board.movePiece(From: from, To: to) {
+                            //add the original pos to steps cache
+                            self.stepsCache.append(from)
+                            
+                            //capture after move
+                            self.board.captureAfterMove(From: from, To: to, ByType: captureType)
+                            self.refreshBoardUI()
+                            
+                            if self.board.win() == 1{
+                                println("black win")
+                            }else if self.board.win() == -1 {
+                                println("white win")
+                            }
+                            
+                            if captureType == Board33.CaptureCondition.None{         //move without capturing, forward to End state
+                                self.gameState = GameState.EndTurn
+                                self.btn_finish.enabled = true
+                                self.btn_finish.backgroundColor = UIColor(red: 52.0/255.0, green: 152.0/255.0, blue: 219.0/255.0, alpha: 1.0)
+                                self.unselectPiece()
+                            }else {                                                 //after capturing, player can choose continue or end the turn
+                                self.gameState = GameState.AfterCapturing
+                                self.btn_finish.enabled = true
+                                self.btn_finish.backgroundColor = UIColor(red: 52.0/255.0, green: 152.0/255.0, blue: 219.0/255.0, alpha: 1.0)
+                                self.unselectPiece()
+                                self.selectPiece(self.btns_pieces[to])
+                            }
+
+                    }
                         
                     }else {
                         println("move failed")
@@ -128,25 +130,28 @@ class Board33ViewController: UIViewController {
             let from = selectedPiece?.tag
             let to = sender.tag
             
-            let captureType = self.board.getCaptureCondition(From: from!, To: to)
-            
-            if self.board.continueMovePiece(From: from!, To: to, LastPos: self.stepsCache.last!, StepCache: self.stepsCache) {
-                self.stepsCache.append(from!)
-                self.board.captureAfterMove(From: from!, To: to, ByType: captureType)
-                self.refreshBoardUI()
+            if self.board.status[to] == 0 {
+                let captureType = self.board.getCaptureCondition(From: from!, To: to)
                 
-                if self.board.win() == 1{
-                    println("black win")
-                }else if self.board.win() == -1 {
-                    println("white win")
+                if self.board.continueMovePiece(From: from!, To: to, LastPos: self.stepsCache.last!, StepCache: self.stepsCache) {
+                    self.stepsCache.append(from!)
+                    self.board.captureAfterMove(From: from!, To: to, ByType: captureType)
+                    self.refreshBoardUI()
+                    
+                    if self.board.win() == 1{
+                        println("black win")
+                    }else if self.board.win() == -1 {
+                        println("white win")
+                    }
+                    
+                    self.unselectPiece()
+                    self.selectPiece(self.btns_pieces[to])
+                    
+                }else {
+                    println("move failed")
                 }
-                
-                self.unselectPiece()
-                self.selectPiece(self.btns_pieces[to])
-                
-            }else {
-                println("move failed")
             }
+           
         }
         
     }

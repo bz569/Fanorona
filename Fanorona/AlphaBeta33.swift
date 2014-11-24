@@ -59,7 +59,7 @@ class AlphaBeta33: NSObject {
                 }
                 
                 if newBoard.processMove(newMove, side: curSide) == Board33.MoveCondition.Success {
-                    println(newMove)
+//                    println(newMove)
                     states.put(newMove, value: newBoard)
                     getAllPossibleMoves(PriorMoves: newMove, states: states, board: board, pos: to, curSide: curSide)
                 }else {
@@ -106,7 +106,7 @@ class AlphaBeta33: NSObject {
             
             //process the current move
             if tmpState.processMove(curMoveStr, side: self.side) != Board33.MoveCondition.Success {
-                print(tmpState.processMove(curMoveStr, side: self.side))
+//                print(tmpState.processMove(curMoveStr, side: self.side))
             }
             
             let resultOfMinValue = minValue(Board: Board33(board:tmpState), currentDepth: currentDepth + 1, alpha: alpha, beta: beta)
@@ -154,7 +154,7 @@ class AlphaBeta33: NSObject {
             
             //process the current move
             if tmpState.processMove(curMoveStr, side: 0 - self.side) != Board33.MoveCondition.Success {
-                print(tmpState.processMove(curMoveStr, side: 0 - self.side))
+//                print(tmpState.processMove(curMoveStr, side: 0 - self.side))
             }
             
             let result:SharedDictionary<String, Float> = maxValue(Board: tmpState, currentDepth: currentDepth + 1, alpha: alpha, beta: beta, move: curMoveStr)
@@ -176,10 +176,9 @@ class AlphaBeta33: NSObject {
     }
     
     func isTimeOut() -> Bool {
-        
         if self.startTime?.timeIntervalSinceNow < -10.0 {
 //            println("timeout")
-            return false
+            return true
         }else {
             return false
         }
