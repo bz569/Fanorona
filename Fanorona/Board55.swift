@@ -389,7 +389,7 @@ class Board55: Board {
             }
             
             let curMove:String = movesArray[i]
-            let moveArray  = Array(curMove)
+            let moveArray:[String]  = curMove.componentsSeparatedByString("-")
             let type:String = String(moveArray[0])
             let from:Int = String(moveArray[1]).toInt()!
             let to:Int = String(moveArray[2]).toInt()!
@@ -420,7 +420,7 @@ class Board55: Board {
             //check to make sure there are not 2 move in the same direction on the same line...
             if moveIndex > 0 {
                 let lastMove:String = movesArray[i - 1]
-                let lastMoveArray = Array(lastMove)
+                let lastMoveArray = lastMove.componentsSeparatedByString("-")
                 let lastFrom:Int = String(lastMoveArray[1]).toInt()!
                 let lastTo:Int = String(lastMoveArray[2]).toInt()!
                 

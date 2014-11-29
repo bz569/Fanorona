@@ -39,7 +39,7 @@ class AlphaBeta55: NSObject {
         let posMoveList:[Int] = board.moveRules[pos]!
         for to in posMoveList{
             for type in ["M", "A", "W"] {
-                let move:String = "\(type)\(pos)\(to)"
+                let move:String = "\(type)-\(pos)-\(to)"
                 var newBoard:Board55 = Board55(board: board)
                 var newMove:String
                 if priorMoves == "" {
