@@ -1,15 +1,14 @@
 //
-//  Board33.swift
+//  Board55.swift
 //  Fanorona
 //
-//  Created by ZhangBoxuan on 14/11/13.
+//  Created by ZhangBoxuan on 14/11/26.
 //  Copyright (c) 2014年 ZhangBoxuan. All rights reserved.
 //
 
 import UIKit
 
-class Board33: Board {
-    
+class Board55: Board {
     
     enum CaptureCondition {
         case None, Apprach, Withdrawal, Both
@@ -17,72 +16,98 @@ class Board33: Board {
     
     enum MoveCondition {
         case    Success,
-                ERROR_NoAction,
-                ERROR_MoveAfterNoCapture,
-                ERROR_FromIndexIllegal,
-                ERROR_NotSameSide,
-                ERROR_CannotReach,
-                ERROR_DestPosNotBlank,
-                ERROR_SameDirection,
-                ERROR_PosVisited,
-                ERROR_MoveWithoutCapWhenCapAvailable,
-                ERROR_MoveWithoutCapInContinueMove,
-                ERROR_ApproachPositionNotAvailable,
-                ERROR_ApprachPositionIsSameSideOrEmpty,
-                ERROR_WithdrawalPositionNotAvailable,
-                ERROR_WithdrawalPositionIsSameSideOrEmpty,
-                ERROR_moveTypeWrong
+        ERROR_NoAction,
+        ERROR_MoveAfterNoCapture,
+        ERROR_FromIndexIllegal,
+        ERROR_NotSameSide,
+        ERROR_CannotReach,
+        ERROR_DestPosNotBlank,
+        ERROR_SameDirection,
+        ERROR_PosVisited,
+        ERROR_MoveWithoutCapWhenCapAvailable,
+        ERROR_MoveWithoutCapInContinueMove,
+        ERROR_ApproachPositionNotAvailable,
+        ERROR_ApprachPositionIsSameSideOrEmpty,
+        ERROR_WithdrawalPositionNotAvailable,
+        ERROR_WithdrawalPositionIsSameSideOrEmpty,
+        ERROR_moveTypeWrong
     }
     
     override init() {
         super.init()
-        self.status = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.size = 3
+        self.status = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.size = 5
         
         self.moveRules = [
-            0: [1, 3, 4],
-            1: [0, 2, 4],
-            2: [1, 4, 5],
-            3: [0, 4, 6],
-            4: [0, 1, 2, 3, 5, 6, 7, 8],
-            5: [2, 4, 8],
-            6: [3, 4, 7],
-            7: [4, 6, 8],
-            8: [4, 5, 7]
+            0: [1, 5, 6],
+            1: [0, 2, 6],
+            2: [1, 3, 6, 7, 8],
+            3: [2, 4, 8],
+            4: [3, 8, 9],
+            5: [0, 6, 10],
+            6: [0, 1, 2, 5, 7, 10, 11, 12],
+            7: [2, 6, 8, 12],
+            8: [2, 3, 4, 7, 9, 12, 13, 14],
+            9: [4, 8, 14],
+            10: [5, 6, 11, 15, 16],
+            11: [6, 10, 12, 16],
+            12: [6, 7, 8, 11, 13, 16, 17, 18],
+            13: [8, 12, 14, 18],
+            14: [8, 9, 13, 18, 19],
+            15: [10, 16, 20,],
+            16: [10, 11, 12, 15, 17, 20, 21, 22],
+            17: [12, 16, 18, 22],
+            18: [12, 13, 14, 17, 19, 22, 23, 24],
+            19: [14, 18, 24],
+            20: [15, 16, 21],
+            21: [16, 20, 22],
+            22: [16, 17, 18, 21, 23],
+            23: [18, 22, 24],
+            24: [18, 19, 23]
         ]
     }
     
-    init(board:Board33) {
+    init(board:Board55) {
         super.init()
         
         self.status = board.status
         self.size = 3
         
         self.moveRules = [
-            0: [1, 3, 4],
-            1: [0, 2, 4],
-            2: [1, 4, 5],
-            3: [0, 4, 6],
-            4: [0, 1, 2, 3, 5, 6, 7, 8],
-            5: [2, 4, 8],
-            6: [3, 4, 7],
-            7: [4, 6, 8],
-            8: [4, 5, 7]
+            0: [1, 5, 6],
+            1: [0, 2, 6],
+            2: [1, 3, 6, 7, 8],
+            3: [2, 4, 8],
+            4: [3, 8, 9],
+            5: [0, 6, 10],
+            6: [0, 1, 2, 5, 7, 10, 11, 12],
+            7: [2, 6, 8, 12],
+            8: [2, 3, 4, 7, 9, 12, 13, 14],
+            9: [4, 8, 14],
+            10: [5, 6, 11, 15, 16],
+            11: [6, 10, 12, 16],
+            12: [6, 7, 8, 11, 13, 16, 17, 18],
+            13: [8, 12, 14, 18],
+            14: [8, 9, 13, 18, 19],
+            15: [10, 16, 20,],
+            16: [10, 11, 12, 15, 17, 20, 21, 22],
+            17: [12, 16, 18, 22],
+            18: [12, 13, 14, 17, 19, 22, 23, 24],
+            19: [14, 18, 24],
+            20: [15, 16, 21],
+            21: [16, 20, 22],
+            22: [16, 17, 18, 21, 23],
+            23: [18, 22, 24],
+            24: [18, 19, 23]
         ]
     }
-   
+    
     func resetBoard() {
-        //For test
-//        self.status = [1, 0, 1, 1 ,-1, -1, -1, 0, -1]
-        
-        self.status = [1, 1, 1, 1, 0, -1, -1, -1, -1]       //1 for black, and -1 for white
+        self.status = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 0, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]       //1 for black, and -1 for white
     }
     
-    func setBoardStatus(status:[Int]) {
-        self.status = status
-    }
+    // MARK: Game rules for human player
     
-    //rules of the game
     
     /**
     Judge if a piece can move to a pos for the first move
@@ -92,32 +117,54 @@ class Board33: Board {
     
     :returns: true if a piece can move to a pos; otherwise false
     */
-    func canMove(From from:Int, To to:Int) -> Bool {
-        
-        //if to not in the next to from
+    func canMove(From from:Int, To to:Int) -> MoveCondition {
+        //if to pos is not next to the from pos
         let posList:[Int] = self.moveRules[from]!
         if !contains(posList, to) {
-            return false
+            return MoveCondition.ERROR_CannotReach
         }
         
         //the dst position is not blank
         if self.status[to] != 0 {
-            println("the dst position is not blank")
-            return false
+            return MoveCondition.ERROR_DestPosNotBlank
         }
         
-        //if has at least one capture, must move to capture
+        //if has at least one capture, must to capture
         if self.hasAnyCaptureFor(Side: status[from]){
-            if self.getCaptureCondition(From: from, To: to) == CaptureCondition.None {
-                println("must move to capture")
-                return false
+            if getCaptureCondition(From: from, To: to) == CaptureCondition.None {
+                return MoveCondition.ERROR_MoveWithoutCapWhenCapAvailable
             }
         }
         
-        return true
+        return MoveCondition.Success
     }
     
     
+    /**
+    Judge if there is any capture condition for this side
+    
+    :param: side 1 for black and -1 for white
+    
+    :returns: ture if there is any capture;otherwise, false
+    */
+    func hasAnyCaptureFor(Side side:Int) -> Bool {
+        for i in 0..<25 {
+            if self.status[i] == side {
+                let from = i
+                let toList = self.moveRules[from]!
+                for to:Int in toList {
+                    if (self.status[to] == 0) {
+                        if self.getCaptureCondition(From: from, To: to) != CaptureCondition.None {
+                            //                            println("has capture form \(from) to \(to):")
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        return false
+    }
+
     
     
     /**
@@ -164,32 +211,6 @@ class Board33: Board {
     }
     
     /**
-    Judge if there is any capture condition for this side
-    
-    :param: side 1 for black and -1 for white
-    
-    :returns: ture if there is any capture;otherwise, false
-    */
-    func hasAnyCaptureFor(Side side:Int) -> Bool {
-        for i in 0..<9 {
-            if self.status[i] == side {
-                let from = i
-                let toList = self.moveRules[from]!
-                for to:Int in toList {
-                    if (self.status[to] == 0) {
-                        if self.getCaptureCondition(From: from, To: to) != CaptureCondition.None {
-//                            println("has capture form \(from) to \(to):")
-                            return true
-                        }
-                    }
-                }
-            }
-        }
-        return false
-    }
-    
-    
-    /**
     Move a piece
     
     :param: from move from this pos
@@ -198,7 +219,7 @@ class Board33: Board {
     :returns: ture if move successfully; otherwise false
     */
     func movePiece(From from:Int, To to:Int) -> Bool {
-        if self.canMove(From: from, To: to) {
+        if self.canMove(From: from, To: to) == MoveCondition.Success{
             self.status[to] = self.status[from]
             self.status[from] = 0
             
@@ -207,6 +228,7 @@ class Board33: Board {
             return false
         }
     }
+
     
     /**
     execute capture after move
@@ -215,17 +237,44 @@ class Board33: Board {
     :param: to   the pos after move
     :param: type the type of capture
     */
-    func captureAfterMove(From from:Int, To to:Int, ByType type:CaptureCondition){
+    func captureAfterMove(From from:Int, To to:Int, ForSide side:Int, ByType type:CaptureCondition){
         let dir = to - from
         if type == CaptureCondition.Apprach {
-            let approachPos = to + dir
-            self.status[approachPos] = 0
+            var approachPos = to + dir
+            while (true) {
+                self.status[approachPos] = 0
+                
+                let tmpPos = approachPos
+                approachPos += dir
+                
+                if !contains(self.moveRules[tmpPos] as [Int]!, approachPos) {
+                    break;
+                }
+                
+                if self.status[approachPos] == side {
+                    break;
+                }
+            }
+
         }else if type == CaptureCondition.Withdrawal {
-            let withdrawalPos = from - dir
-            self.status[withdrawalPos] = 0
+            var withdrawalPos = from - dir
+            while (true) {
+                self.status[withdrawalPos] = 0
+                
+                withdrawalPos -= dir
+                
+                if !contains(self.moveRules[to] as [Int]!, withdrawalPos) {
+                    break;
+                }
+                
+                if self.status[withdrawalPos] == side {
+                    break;
+                }
+            }
         }
         
     }
+    
     
     /**
     get if someone win at the current state
@@ -241,7 +290,7 @@ class Board33: Board {
             return 0
         }
     }
-    
+
     
     /**
     if player can continue move after a capture
@@ -316,9 +365,9 @@ class Board33: Board {
             return false
         }
     }
+
     
-    
-    // rules for ai player
+    //MARK: rules for ai player
     func processMove(var moveString:NSString, side:Int) -> MoveCondition{
         
         if countElements(moveString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) == 0 {
@@ -348,7 +397,7 @@ class Board33: Board {
             //check rules of fanorona
             
             //Check the from index is legal
-            if (from > 8 || from < 0) {
+            if (from > 24 || from < 0) {
                 return MoveCondition.ERROR_FromIndexIllegal
             }
             
@@ -404,7 +453,7 @@ class Board33: Board {
                     return MoveCondition.ERROR_MoveWithoutCapInContinueMove
                 }
             }
-            //check for approach capture
+                //check for approach capture
             else if type == "A"{
                 let dir:Int = to - from
                 var approachPos:Int = to + dir
@@ -435,7 +484,7 @@ class Board33: Board {
                     }
                 }
             }
-            //check for withdrawal capture
+                //check for withdrawal capture
             else if type == "W" {
                 let dir:Int = to - from
                 var withdrawalPos:Int = from - dir
@@ -480,23 +529,10 @@ class Board33: Board {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    

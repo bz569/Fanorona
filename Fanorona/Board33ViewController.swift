@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Board33ViewController: UIViewController {
+class Board33ViewController: UIViewController, UIAlertViewDelegate {
     
     enum GameState {
         case BeforeFirstStep, AfterCapturing, EndTurn
@@ -43,13 +43,17 @@ class Board33ViewController: UIViewController {
             btn.layer.cornerRadius = 20
         }
         
-        self.startGame()
-        self.refreshBoardUI()
+        
         
         //!!! test for alphabeta, need to be remove
 //        let alphaBeta:AlphaBeta33 = AlphaBeta33(side: 1, initBoard: self.board)
 //        alphaBeta.alphaBetaSearch(self.board)
         
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        self.refreshBoardUI()
+        self.startGame()
     }
     
     func startGame() {
@@ -59,6 +63,11 @@ class Board33ViewController: UIViewController {
         self.btn_finish.enabled = false
         self.stepsCache = []
         self.board.resetBoard()
+        self.refreshBoardUI()
+        
+        if self.playerSide == 1 {
+            aiPlayer()
+        }
     }
     
     func refreshBoardUI(){
@@ -96,10 +105,8 @@ class Board33ViewController: UIViewController {
                             self.board.captureAfterMove(From: from, To: to, ByType: captureType)
                             self.refreshBoardUI()
                             
-                            if self.board.win() == 1{
-                                println("black win")
-                            }else if self.board.win() == -1 {
-                                println("white win")
+                            if self.board.win() != 0 {
+                                self.gameDidEnd()
                             }
                             
                             if captureType == Board33.CaptureCondition.None{         //move without capturing, forward to End state
@@ -138,10 +145,8 @@ class Board33ViewController: UIViewController {
                     self.board.captureAfterMove(From: from!, To: to, ByType: captureType)
                     self.refreshBoardUI()
                     
-                    if self.board.win() == 1{
-                        println("black win")
-                    }else if self.board.win() == -1 {
-                        println("white win")
+                    if self.board.win() != 0 {
+                        self.gameDidEnd()
                     }
                     
                     self.unselectPiece()
@@ -170,6 +175,11 @@ class Board33ViewController: UIViewController {
             let bestMove:String = ai.alphaBetaSearch(ai.initBoard)
             self.board.processMove(bestMove, side: self.turn)
             self.refreshBoardUI()
+            
+            if self.board.win() != 0 {
+                self.gameDidEnd()
+            }
+            
             self.changeSide()
         }
     }
@@ -186,6 +196,19 @@ class Board33ViewController: UIViewController {
         }
     }
     
+    func gameDidEnd(){
+        var winner:NSString = ""
+        if self.board.win() == -1 {
+            winner = "white"
+        }else if self.board.win() == 1{
+            winner = "black"
+        }
+        
+        let alert:UIAlertView = UIAlertView(title: nil, message: "\(winner) win!", delegate: self, cancelButtonTitle: "Restart")
+        alert.show()
+    }
+    
+    
     func selectPiece(piece:UIButton) {
         self.selectedPiece = piece
         self.selectedPiece!.setImage(UIImage(named: "selectedPiece"), forState: UIControlState.Normal)
@@ -196,6 +219,10 @@ class Board33ViewController: UIViewController {
             self.selectedPiece!.setImage(UIImage(), forState: UIControlState.Normal)
             self.selectedPiece = nil
         }
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        self.startGame()
     }
 
 }
