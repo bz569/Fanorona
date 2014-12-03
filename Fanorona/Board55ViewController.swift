@@ -8,6 +8,10 @@
 
 import UIKit
 
+
+//TODO: 检查5*5 棋盘capture的时候，同一方向不连续的情况； withdraw 连续一列的情况
+
+
 class Board55ViewController: UIViewController, UIAlertViewDelegate {
     
     enum GameState {
@@ -197,6 +201,7 @@ class Board55ViewController: UIViewController, UIAlertViewDelegate {
         self.gameState = GameState.BeforeFirstStep
         self.stepsCache = []
         self.board.resetBoard()
+        self.unselectPiece()
         self.refreshBoardUI()
         
     }

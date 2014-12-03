@@ -14,7 +14,14 @@ class AlphaBeta55: NSObject {
     var initBoard:Board55
     
     var startTime:NSDate?
-    let depthLimit:Int = 15
+    let depthLimit:Int = 8
+    
+    //information need to be displayed
+    var isCutOff:Bool = false
+    var maximumDepth:Int = 0
+    var totalNumberOfNodes:Int = 0
+    var numberOfPruningInMAX:Int = 0
+    var numberOfPruningInMIN:Int = 0
     
     init(side:Int, initBoard:Board55){
         self.side = side
@@ -63,27 +70,64 @@ class AlphaBeta55: NSObject {
     func alphaBetaSearch(board:Board55) -> String {
         
         self.startTime = NSDate()
+        
+        //init information
+        self.isCutOff = false
+        self.maximumDepth = 0
+        self.totalNumberOfNodes = 0
+        self.numberOfPruningInMAX = 0
+        self.numberOfPruningInMIN = 0
+        
         let bestMove:SharedDictionary = maxValue(Board: self.initBoard, currentDepth: 0, alpha: (0 - Float.infinity), beta: Float.infinity, move: "")
         let keys = Array(bestMove.dict.keys)
         let bestMoveStr:String = "\(keys[0])"
         
-        println("BestMove=\(bestMoveStr)")
+        println("BestMove=\(bestMoveStr)\nCutOff:\(self.isCutOff)\nMax depth:\(self.maximumDepth)\nNumber of times pruning occurred within the MAX-VALUE function:\(self.numberOfPruningInMAX)\nNumber of times pruning occurred within the MIN-VALUE function:\(self.numberOfPruningInMIN)\n-------------------------------------------\n")
         return bestMoveStr
     }
     
     func maxValue(Board board:Board55, currentDepth:Int, var alpha:Float, var beta:Float, move:String) -> SharedDictionary<String, Float> {
         var hash:SharedDictionary<String, Float> = SharedDictionary<String, Float>()
         
+        //record max depth
+        self.maximumDepth = max(self.maximumDepth, currentDepth)
+
         //needed vars
         var myState:Board55 = Board55(board: board)
         var bestMove:String
         var value:Float = 0 - Float.infinity
         
         //termination condition
-        if myState.win() != 0 || isTimeOut() || currentDepth >= self.depthLimit {
+//        if myState.win() != 0 || isTimeOut() || currentDepth >= self.depthLimit {
+//            hash.put(move, value: getHeuristic(Board: myState, side: self.side))
+//            return hash
+//        }
+        
+        //reach the teminate state
+        if myState.win() != 0 {
             hash.put(move, value: getHeuristic(Board: myState, side: self.side))
+            
+            self.isCutOff = false
+            
             return hash
         }
+        
+        //timeout
+        if isTimeOut() {
+            hash.put(move, value: getHeuristic(Board: myState, side: self.side))
+            
+            self.isCutOff = true
+            return hash
+        }
+        
+        //over depth limit
+        if currentDepth >= self.depthLimit {
+            hash.put(move, value: getHeuristic(Board: myState, side: self.side))
+            
+            self.isCutOff = true
+            return hash
+        }
+
         
         //generate a list of possible moves
         let possibleMoves:SharedDictionary<String, Board55> = getPossibleBoardStates(Board55(board: myState), curSide:self.side)
@@ -108,6 +152,9 @@ class AlphaBeta55: NSObject {
             //            value = max(value, resultOfMinValue)
             
             if value >= beta {
+                
+                self.numberOfPruningInMAX += 1
+                
                 hash.put(bestMove, value: value)
                 return hash
             }
@@ -124,13 +171,40 @@ class AlphaBeta55: NSObject {
     
     func minValue(Board board:Board55, currentDepth:Int, var alpha:Float, var beta:Float) -> Float {
         
+        //record max depth
+        self.maximumDepth = max(self.maximumDepth, currentDepth)
+
+        
         //needed var
         var theirState:Board55 = Board55(board: board)
         var bestMove:String
         var value:Float = Float.infinity
         
         //termination condition
-        if theirState.win() != 0 || isTimeOut() || currentDepth >= self.depthLimit {
+//        if theirState.win() != 0 || isTimeOut() || currentDepth >= self.depthLimit {
+//            return getHeuristic(Board: theirState, side: self.side)
+//        }
+
+        //reach terminate state
+        if theirState.win() != 0{
+            
+            self.isCutOff = false
+            return getHeuristic(Board: theirState, side: self.side)
+        }
+        
+        //timeout
+        if isTimeOut() {
+            
+            self.isCutOff = true
+            
+            return getHeuristic(Board: theirState, side: self.side)
+        }
+        
+        //over depth limit
+        if currentDepth >= self.depthLimit {
+            
+            self.isCutOff = true
+            
             return getHeuristic(Board: theirState, side: self.side)
         }
         
@@ -154,6 +228,9 @@ class AlphaBeta55: NSObject {
             value = min(value, valueOfResult)
             
             if value <= alpha {
+                
+                self.numberOfPruningInMIN += 1
+                
                 return value
             }
             
@@ -167,7 +244,7 @@ class AlphaBeta55: NSObject {
     
     func isTimeOut() -> Bool {
         if self.startTime?.timeIntervalSinceNow < -10.0 {
-            //            println("timeout")
+//            println("timeout")
             return true
         }else {
             return false
@@ -175,7 +252,6 @@ class AlphaBeta55: NSObject {
     }
     
     func getHeuristic(Board board:Board55, side:Int) -> Float {
-        //TODO: 调整启发函数，使其再不能取胜的情况下，尽量选择平局
         if side == 1 {              //for black side
             if board.win() == 1 {
                 return 1.0

@@ -251,7 +251,7 @@ class Board55: Board {
                     break;
                 }
                 
-                if self.status[approachPos] == side {
+                if self.status[approachPos] == side || self.status[approachPos] == 0  {
                     break;
                 }
             }
@@ -261,13 +261,14 @@ class Board55: Board {
             while (true) {
                 self.status[withdrawalPos] = 0
                 
+                let tmpPos = withdrawalPos
                 withdrawalPos -= dir
                 
-                if !contains(self.moveRules[to] as [Int]!, withdrawalPos) {
+                if !contains(self.moveRules[tmpPos] as [Int]!, withdrawalPos) {
                     break;
                 }
                 
-                if self.status[withdrawalPos] == side {
+                if self.status[withdrawalPos] == side || self.status[withdrawalPos] == 0 {
                     break;
                 }
             }
@@ -479,9 +480,10 @@ class Board55: Board {
                         break;
                     }
                     
-                    if self.status[approachPos] == side {
+                    if self.status[approachPos] == side || self.status[approachPos] == 0{
                         break;
                     }
+                    
                 }
             }
                 //check for withdrawal capture
@@ -509,7 +511,7 @@ class Board55: Board {
                         break;
                     }
                     
-                    if self.status[withdrawalPos] == side {
+                    if self.status[withdrawalPos] == side || self.status[withdrawalPos] == 0{
                         break;
                     }
                 }
