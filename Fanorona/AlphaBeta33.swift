@@ -16,6 +16,14 @@ class AlphaBeta33: NSObject {
     var startTime:NSDate?
     let depthLimit:Int = 15
     
+    //information need to be displayed
+    var isCutOff:Bool = false
+    var cutOffReason:String = ""
+    var maximumDepth:Int = 0
+    var totalNumberOfNodes:Int = 0
+    var numberOfPruningInMAX:Int = 0
+    var numberOfPruningInMIN:Int = 0
+    
     init(side:Int, initBoard:Board33){
         self.side = side
         self.initBoard = initBoard
