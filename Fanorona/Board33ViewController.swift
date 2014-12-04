@@ -85,6 +85,11 @@ class Board33ViewController: UIViewController, UIAlertViewDelegate {
         }
     }
     
+    @IBAction func onTouchBackButton(sender: UIButton) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
     @IBAction func onClickPiece(sender: UIButton) {
         if self.gameState == GameState.BeforeFirstStep {
             if self.selectedPiece == nil {
@@ -174,7 +179,7 @@ class Board33ViewController: UIViewController, UIAlertViewDelegate {
     func aiPlayer(){
         //make sure it is ai's turn
         if self.turn != self.playerSide {
-            let ai:AlphaBeta33 = AlphaBeta33(side: self.turn, initBoard: self.board)
+            let ai:AlphaBeta33 = AlphaBeta33(side: self.turn, initBoard: self.board, depthLimit:self.gameDifficulty)
             let bestMove:String = ai.alphaBetaSearch(ai.initBoard)
             self.board.processMove(bestMove, side: self.turn)
             self.refreshBoardUI()

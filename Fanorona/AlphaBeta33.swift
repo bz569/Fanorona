@@ -23,9 +23,10 @@ class AlphaBeta33: NSObject {
     var numberOfPruningInMAX:Int = 0
     var numberOfPruningInMIN:Int = 0
     
-    init(side:Int, initBoard:Board33){
+    init(side:Int, initBoard:Board33, depthLimit:Int){
         self.side = side
         self.initBoard = initBoard
+        self.depthLimit = depthLimit
         super.init()
     }
     
@@ -82,7 +83,7 @@ class AlphaBeta33: NSObject {
         let keys = Array(bestMove.dict.keys)
         let bestMoveStr:String = "\(keys[0])"
         
-        println("BestMove=\(bestMoveStr)\nCutOff:\(self.isCutOff)\nMax depth:\(self.maximumDepth)\nNumber of times pruning occurred within the MAX-VALUE function:\(self.numberOfPruningInMAX)\nNumber of times pruning occurred within the MIN-VALUE function:\(self.numberOfPruningInMIN)\n-------------------------------------------\n")
+        println("BestMove=\(bestMoveStr)\nCutOff:\(self.isCutOff)\nMax depth:\(self.maximumDepth)\nTotal number of nodes generated:\(self.totalNumberOfNodes)\nNumber of times pruning occurred within the MAX-VALUE function:\(self.numberOfPruningInMAX)\nNumber of times pruning occurred within the MIN-VALUE function:\(self.numberOfPruningInMIN)\n-------------------------------------------\n")
         return bestMoveStr
     }
     

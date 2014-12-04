@@ -59,6 +59,9 @@ class Board55ViewController: UIViewController, UIAlertViewDelegate {
         self.startGame()
     }
     
+    @IBAction func onTouchBackButton(sender: UIButton) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
     
     @IBAction func onTouchPeiceBtn(sender: UIButton) {
         
@@ -239,7 +242,7 @@ class Board55ViewController: UIViewController, UIAlertViewDelegate {
     func aiPlayer(){
         //make sure it is ai's turn
         if self.turn != self.playerSide {
-            let ai:AlphaBeta55 = AlphaBeta55(side: self.turn, initBoard: self.board)
+            let ai:AlphaBeta55 = AlphaBeta55(side: self.turn, initBoard: self.board, depthLimit: self.gameDifficulty)
             let bestMove:String = ai.alphaBetaSearch(ai.initBoard)
             self.board.processMove(bestMove, side: self.turn)
             self.refreshBoardUI()

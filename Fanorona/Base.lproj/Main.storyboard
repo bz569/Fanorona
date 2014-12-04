@@ -353,11 +353,28 @@
                                     <action selector="onClickFinishButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="QEB-N1-cVx"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DYg-Db-sz7">
+                                <rect key="frame" x="16" y="260" width="100" height="40"/>
+                                <color key="backgroundColor" red="0.20392156859999999" green="0.59607843140000005" blue="0.85882352939999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="sDV-ob-fbK"/>
+                                    <constraint firstAttribute="width" constant="100" id="zQy-je-bEZ"/>
+                                </constraints>
+                                <state key="normal" title="Back To Menu">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onTouchBackButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="jTA-JL-NF7"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.94509803921568625" green="0.7686274509803922" blue="0.058823529411764705" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="DYg-Db-sz7" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="CHw-N3-9tX"/>
                             <constraint firstAttribute="centerY" secondItem="Kqt-Ek-Un4" secondAttribute="centerY" id="d29-iw-Oac"/>
                             <constraint firstAttribute="trailing" secondItem="4gZ-v8-zVl" secondAttribute="trailing" constant="16" id="nPI-2t-5zz"/>
+                            <constraint firstAttribute="bottom" secondItem="DYg-Db-sz7" secondAttribute="bottom" constant="20" id="t4A-FF-AqK"/>
                             <constraint firstAttribute="centerY" secondItem="4gZ-v8-zVl" secondAttribute="centerY" id="xpJ-1D-24J"/>
                             <constraint firstAttribute="centerX" secondItem="Kqt-Ek-Un4" secondAttribute="centerX" id="zKB-Bp-lYF"/>
                         </constraints>
@@ -798,13 +815,30 @@
                                     <action selector="onTouchFinishButton:" destination="uhY-LK-gmC" eventType="touchUpInside" id="wz8-uS-IdA"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TK3-le-v9M">
+                                <rect key="frame" x="16" y="272" width="100" height="40"/>
+                                <color key="backgroundColor" red="0.20392156859999999" green="0.59607843140000005" blue="0.85882352939999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="c2y-CT-sVb"/>
+                                    <constraint firstAttribute="width" constant="100" id="kYQ-lP-wHA"/>
+                                </constraints>
+                                <state key="normal" title="Back To Menu">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onTouchBackButton:" destination="uhY-LK-gmC" eventType="touchUpInside" id="X77-Aa-ZMp"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.94509803920000002" green="0.76862745099999996" blue="0.058823529409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="TK3-le-v9M" secondAttribute="bottom" constant="8" id="3cv-HM-etc"/>
                             <constraint firstAttribute="centerY" secondItem="lMs-5u-qZU" secondAttribute="centerY" id="VwB-Xr-Ltx"/>
                             <constraint firstAttribute="centerX" secondItem="lMs-5u-qZU" secondAttribute="centerX" id="YKz-lE-s1b"/>
                             <constraint firstAttribute="trailing" secondItem="ltH-BX-eQe" secondAttribute="trailing" constant="16" id="aFT-Oj-dgg"/>
                             <constraint firstAttribute="centerY" secondItem="ltH-BX-eQe" secondAttribute="centerY" id="gI6-6F-XYL"/>
+                            <constraint firstItem="TK3-le-v9M" firstAttribute="leading" secondItem="I6l-iX-KjW" secondAttribute="leading" constant="16" id="sAx-iJ-cQk"/>
                         </constraints>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>

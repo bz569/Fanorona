@@ -23,9 +23,10 @@ class AlphaBeta55: NSObject {
     var numberOfPruningInMAX:Int = 0
     var numberOfPruningInMIN:Int = 0
     
-    init(side:Int, initBoard:Board55){
+    init(side:Int, initBoard:Board55, depthLimit:Int){
         self.side = side
         self.initBoard = initBoard
+        self.depthLimit = depthLimit
         super.init()
     }
     
@@ -82,7 +83,7 @@ class AlphaBeta55: NSObject {
         let keys = Array(bestMove.dict.keys)
         let bestMoveStr:String = "\(keys[0])"
         
-        println("BestMove=\(bestMoveStr)\nCutOff:\(self.isCutOff)\nMax depth:\(self.maximumDepth)\nNumber of times pruning occurred within the MAX-VALUE function:\(self.numberOfPruningInMAX)\nNumber of times pruning occurred within the MIN-VALUE function:\(self.numberOfPruningInMIN)\n-------------------------------------------\n")
+        println("BestMove=\(bestMoveStr)\nCutOff:\(self.isCutOff)\nMax depth:\(self.maximumDepth)\nTotal number of nodes generated:\(self.totalNumberOfNodes)\nNumber of times pruning occurred within the MAX-VALUE function:\(self.numberOfPruningInMAX)\nNumber of times pruning occurred within the MIN-VALUE function:\(self.numberOfPruningInMIN)\n-------------------------------------------\n")
         return bestMoveStr
     }
     
@@ -133,6 +134,7 @@ class AlphaBeta55: NSObject {
         let possibleMoves:SharedDictionary<String, Board55> = getPossibleBoardStates(Board55(board: myState), curSide:self.side)
         let moves = Array(possibleMoves.dict.keys)
         bestMove = "\(moves[0])"
+        self.totalNumberOfNodes += moves.count
         
         for curMove in moves {
             let curMoveStr = "\(curMove)"
@@ -211,6 +213,7 @@ class AlphaBeta55: NSObject {
         //generate a list of possible moves
         let possibleMoves:SharedDictionary<String, Board55> = getPossibleBoardStates(Board55(board: theirState), curSide: 0 - self.side)
         let moves = Array(possibleMoves.dict.keys)
+        self.totalNumberOfNodes += moves.count
         
         for curMove in moves {
             let curMoveStr = "\(curMove)"
