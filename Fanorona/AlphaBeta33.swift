@@ -105,7 +105,7 @@ class AlphaBeta33: NSObject {
 
         //reach the teminate state
         if myState.win() != 0 {
-            hash.put(move, value: getHeuristic(Board: myState, side: self.side))
+            hash.put(move, value: getHeuristic(Board: myState, side1: self.side))
             
             self.isCutOff = false
             
@@ -114,7 +114,7 @@ class AlphaBeta33: NSObject {
         
         //timeout
         if isTimeOut() {
-            hash.put(move, value: getHeuristic(Board: myState, side: self.side))
+            hash.put(move, value: getHeuristic(Board: myState, side1: self.side))
             
             self.isCutOff = true
             return hash
@@ -122,7 +122,7 @@ class AlphaBeta33: NSObject {
         
         //over depth limit
         if currentDepth >= self.depthLimit {
-            hash.put(move, value: getHeuristic(Board: myState, side: self.side))
+            hash.put(move, value: getHeuristic(Board: myState, side1: self.side))
             
             self.isCutOff = true
             return hash
@@ -188,7 +188,7 @@ class AlphaBeta33: NSObject {
         if theirState.win() != 0{
             
             self.isCutOff = false
-            return getHeuristic(Board: theirState, side: self.side)
+            return getHeuristic(Board: theirState,side1: self.side)
         }
 
         //timeout
@@ -196,7 +196,7 @@ class AlphaBeta33: NSObject {
             
             self.isCutOff = true
             
-            return getHeuristic(Board: theirState, side: self.side)
+            return getHeuristic(Board: theirState,side1: self.side)
         }
         
         //over depth limit
@@ -204,7 +204,7 @@ class AlphaBeta33: NSObject {
             
             self.isCutOff = true
             
-            return getHeuristic(Board: theirState, side: self.side)
+            return getHeuristic(Board: theirState, side1: self.side)
         }
 
 
@@ -255,35 +255,48 @@ class AlphaBeta33: NSObject {
         }
     }
     
-    func getHeuristic(Board board:Board33, side:Int) -> Float {
-        //TODO: 调整启发函数，使其再不能取胜的情况下，尽量选择平局
-        if side == 1 {              //for black side
-            if board.win() == 1 {
-                return 1.0
-            }else if board.win() == -1 {
-                return -1.0
-            }else {
-                var h:Float = 0
-                for i:Int in board.status {
-                    h += Float(i)
-                    return h/4
-                }
-            }
-        }else if side == -1 {       //for white side
-            if board.win() == 1 {
-                return -1.0
-            }else if board.win() == -1 {
-                return 1.0
-            }else {
-                var h:Float = 0
-                for i:Int in board.status {
-                    h += Float(i)
-                    return 0.0 - h/4
-                }
+    func getHeuristic(Board board:Board33, side1:Int) -> Float {
+//        if side == 1 {              //for black side
+//            if board.win() == 1 {
+//                return 1.0
+//            }else if board.win() == -1 {
+//                return -1.0
+//            }else {
+//                var h:Float = 0
+//                for i:Int in board.status {
+//                    h += Float(i)
+//                    return h/4
+//                }
+//            }
+//        }else if side == -1 {       //for white side
+//            if board.win() == 1 {
+//                return -1.0
+//            }else if board.win() == -1 {
+//                return 1.0
+//            }else {
+//                var h:Float = 0
+//                for i:Int in board.status {
+//                    h += Float(i)
+//                    return 0.0 - h/4
+//                }
+//            }
+//        }
+//        
+//        return 0.0
+        let oppsiteSide = 0 - side1
+        var opCount:Int = 0
+        var myCount:Int = 0
+        
+        for i in 0..<25 {
+            if board.status[i] == oppsiteSide {
+                opCount += 1
+            }else if board.status[i] == side1 {
+                myCount += 1
             }
         }
         
-        return 0.0
+        return Float((13 - opCount) + myCount)
+
     }
 }
 

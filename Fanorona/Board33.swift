@@ -454,9 +454,10 @@ class Board33: Board {
                 while (true) {
                     self.status[withdrawalPos] = 0
                     
+                    let tmpPos = withdrawalPos
                     withdrawalPos -= dir
                     
-                    if !contains(self.moveRules[to] as [Int]!, withdrawalPos) {
+                    if !contains(self.moveRules[tmpPos] as [Int]!, withdrawalPos) {
                         break;
                     }
                     

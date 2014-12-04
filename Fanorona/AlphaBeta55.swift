@@ -14,7 +14,7 @@ class AlphaBeta55: NSObject {
     var initBoard:Board55
     
     var startTime:NSDate?
-    let depthLimit:Int = 8
+    let depthLimit:Int = 15
     
     //information need to be displayed
     var isCutOff:Bool = false
@@ -252,33 +252,48 @@ class AlphaBeta55: NSObject {
     }
     
     func getHeuristic(Board board:Board55, side:Int) -> Float {
-        if side == 1 {              //for black side
-            if board.win() == 1 {
-                return 1.0
-            }else if board.win() == -1 {
-                return -1.0
-            }else {
-                var h:Float = 0
-                for i:Int in board.status {
-                    h += Float(i)
-                    return h/12
-                }
-            }
-        }else if side == -1 {       //for white side
-            if board.win() == 1 {
-                return -1.0
-            }else if board.win() == -1 {
-                return 1.0
-            }else {
-                var h:Float = 0
-                for i:Int in board.status {
-                    h += Float(i)
-                    return 0.0 - h/12
-                }
+//        if side == 1 {              //for black side
+//            if board.win() == 1 {
+//                return 1.0
+//            }else if board.win() == -1 {
+//                return -1.0
+//            }else {
+//                var h:Float = 0
+//                for i:Int in board.status {
+//                    h += Float(i)
+//                    return h/12
+//                }
+//            }
+//        }else if side == -1 {       //for white side
+//            if board.win() == 1 {
+//                return -1.0
+//            }else if board.win() == -1 {
+//                return 1.0
+//            }else {
+//                var h:Float = 0
+//                for i:Int in board.status {
+//                    h += Float(i)
+//                    return 0.0 - h/12
+//                }
+//            }
+//        }
+//        
+//        return 0.0
+        
+        let oppsiteSide = 0 - side
+        var opCount:Int = 0
+        var myCount:Int = 0
+        
+        for i in 0..<25 {
+            if board.status[i] == oppsiteSide {
+                opCount += 1
+            }else if board.status[i] == side {
+                myCount += 1
             }
         }
         
-        return 0.0
+        return Float((13 - opCount) + myCount)
+        
     }
 }
 
