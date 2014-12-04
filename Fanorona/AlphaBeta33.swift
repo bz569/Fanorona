@@ -287,7 +287,7 @@ class AlphaBeta33: NSObject {
         var opCount:Int = 0
         var myCount:Int = 0
         
-        for i in 0..<25 {
+        for i in 0..<9 {
             if board.status[i] == oppsiteSide {
                 opCount += 1
             }else if board.status[i] == side1 {

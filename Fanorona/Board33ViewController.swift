@@ -24,13 +24,16 @@ class Board33ViewController: UIViewController, UIAlertViewDelegate {
     var gameState:GameState = GameState.BeforeFirstStep
     var stepsCache:[Int] = []
     
+    //game settings
     var playerSide:Int = -1
+    var gameDifficulty:Int = 15
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
         
         //order the buttons by their tags
         self.btns_pieces.sort { (btn1:UIButton, btn2:UIButton) -> Bool in

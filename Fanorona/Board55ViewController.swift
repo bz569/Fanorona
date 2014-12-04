@@ -28,7 +28,9 @@ class Board55ViewController: UIViewController, UIAlertViewDelegate {
     var gameState:GameState = GameState.BeforeFirstStep
     var stepsCache:[Int] = []
     
+    //game settings
     var playerSide:Int = -1
+    var gameDifficulty:Int = 15
     
     //store tmp from and to
     var tmpFrom:Int = -1
@@ -204,6 +206,9 @@ class Board55ViewController: UIViewController, UIAlertViewDelegate {
         self.unselectPiece()
         self.refreshBoardUI()
         
+        if self.playerSide == 1 {
+            aiPlayer()
+        }
     }
     
     func gameDidEnd(){
